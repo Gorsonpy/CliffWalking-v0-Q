@@ -1,6 +1,7 @@
 import gym
 import turtle
 import numpy as np
+from Learning.QLearn import QLearning
 
 # turtle tutorial : https://docs.python.org/3.3/library/turtle.html
 
@@ -81,3 +82,13 @@ class CliffWalkingWapper(gym.Wrapper):
         x_pos = self.s % self.max_x
         y_pos = self.max_y - 1 - int(self.s / self.max_x)
         self.move_player(x_pos, y_pos)
+        
+def env_agent_config(cfg,seed=1):
+    '''创建环境和智能体
+    '''    
+    env = gym.make(cfg.env_name,new_step_api=True)  
+    env = CliffWalkingWapper(env)
+    n_states = env.observation_space.n # 状态维度
+    n_actions = env.action_space.n # 动作维度
+    agent = QLearning(n_states,n_actions,cfg)
+    return env,agent
